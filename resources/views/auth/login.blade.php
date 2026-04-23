@@ -12,6 +12,8 @@
             </div>
         @endif
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -24,6 +26,13 @@
                 <x-jet-label for="password" value="{{ __('Password') }}" />
                 <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
             </div>
+
+            <div class="mt-4 flex justify-center">
+                <div class="g-recaptcha" data-sitekey="6LeWuMUsAAAAAOV0SlDBiPc72_wr9-Kt7uewEAA5"></div>
+            </div>
+            @error('g-recaptcha-response')
+                <p class="text-sm text-red-600 mt-2">Fadlan xaqiiji inaadan robot ahayn.</p>
+            @enderror
 
             <div class="block mt-4">
                 <label for="remember_me" class="flex items-center">

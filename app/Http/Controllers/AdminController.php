@@ -199,5 +199,25 @@ class AdminController extends Controller
     }
 
 
+    public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+        'g-recaptcha-response' => 'required|captcha' // Haddii aad isticmaalayso package-ka 'no-captcha'
+    ]);
+
+    // Haddii uusan package jirin, waxaad isticmaali kartaa HTTP request caadi ah
+    $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        'secret' => env('NOCAPTCHA_SECRET'),
+        'response' => $request->input('g-recaptcha-response'),
+    ]);
+
+    if ($response->json()['success']) {
+        // Halkan ka sii wad login-ka caadiga ah
+    } else {
+        return back()->withErrors(['g-recaptcha-response' => 'Xaqiijinta CAPTCHA way fashilantay.']);
+    }
+}
 
 }

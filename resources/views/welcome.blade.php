@@ -18,8 +18,37 @@
             body {
                 font-family: 'Nunito', sans-serif;
             }
+            .chatbot-launcher {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #EF3B2D; /* Midabka Laravel-kaaga */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+.chat-window {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    flex-direction: column;
+}
         </style>
     </head>
+    
     <body class="antialiased">
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
@@ -44,6 +73,8 @@
                         </g>
                     </svg>
                 </div>
+
+                
 
                 <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
                     <div class="grid grid-cols-1 md:grid-cols-2">
@@ -100,6 +131,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="chatbot-launcher" onclick="toggleChat()">
+    <svg fill="white" width="30" height="30" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+</div>
+
+<div id="chatWindow" class="chat-window">
+    <div style="background: #EF3B2D; color: white; padding: 15px; border-radius: 10px 10px 0 0;">
+        <strong>Clinic Chatbot</strong>
+    </div>
+    <div id="chatMessages" style="flex: 1; padding: 10px; overflow-y: auto; color: #333;">
+        <p>Ku soo dhawaada Clinic Management System! Sideen ku caawin karnaa?</p>
+    </div>
+    <div style="padding: 10px; border-top: 1px solid #eee;">
+        <input type="text" id="userInput" placeholder="Halkan wax ku qor..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+    </div>
+</div>
 
                 <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
                     <div class="text-center text-sm text-gray-500 sm:text-left">
@@ -128,5 +174,50 @@
                 </div>
             </div>
         </div>
+        <script>
+    // Waxaan hubineynaa in bogga oo dhan uu load-gareeyo
+    window.onload = function() {
+        const userInput = document.getElementById('userInput');
+        const msgDiv = document.getElementById('chatMessages');
+
+        if (userInput) {
+            userInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    let msg = this.value.trim();
+                    if(msg !== "") {
+                        // Farriinta isticmaalaha
+                        msgDiv.innerHTML += `<div style="text-align:right; margin-bottom:10px;">
+                            <span style="background:#f1f1f1; padding:5px 10px; border-radius:10px; display:inline-block;">
+                                <b>Adiga:</b> ${msg}
+                            </span>
+                        </div>`;
+                        
+                        this.value = "";
+                        msgDiv.scrollTop = msgDiv.scrollHeight;
+
+                        // Jawaabta Bot-ka (Tusaale ahaan)
+                        setTimeout(() => {
+                            msgDiv.innerHTML += `<div style="text-align:left; margin-bottom:10px;">
+                                <span style="background:#EF3B2D; color:white; padding:5px 10px; border-radius:10px; display:inline-block;">
+                                    <b>Bot:</b> Waad ku mahadsantahay farriintaada. Dhawaan ayaan kugu soo jawaabi doonaa.
+                                </span>
+                            </div>`;
+                            msgDiv.scrollTop = msgDiv.scrollHeight;
+                        }, 1000);
+                    }
+                }
+            });
+        }
+    };
+
+    function toggleChat() {
+        const chat = document.getElementById('chatWindow');
+        if (chat.style.display === 'flex') {
+            chat.style.display = 'none';
+        } else {
+            chat.style.display = 'flex';
+        }
+    }
+</script>
     </body>
 </html>
