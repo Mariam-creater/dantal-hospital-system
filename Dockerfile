@@ -25,8 +25,7 @@ COPY . /var/www/html
 
 # Ku rakib Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-dev --optimize-autoloader
-
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 # Sii ogolaanshaha folder-yada Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
@@ -39,3 +38,5 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.
 EXPOSE 80
 
 CMD ["apache2-foreground"]
+
+
