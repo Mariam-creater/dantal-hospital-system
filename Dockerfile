@@ -1,5 +1,5 @@
 # Isticmaal nuqul PHP ah oo leh Apache
-FROM php:8.1-apache
+FROM php:8.2-apache
 
 # Ku rakib extensions-ka Laravel u baahan yahay
 RUN apt-get update && apt-get install -y \
