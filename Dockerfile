@@ -1,6 +1,10 @@
 # Isticmaal nuqul PHP ah oo leh Apache
 FROM php:8.2-apache
 
+# --- KU DAR SAFAFKAN CUSUB SI AAD ERROR-KA MPM U XALLISO ---
+RUN a2dismod mpm_event && a2enmod mpm_prefork
+# --------------------------------------------------------
+
 # Ku rakib extensions-ka Laravel u baahan yahay
 RUN apt-get update && apt-get install -y \
     libpng-dev \
@@ -26,6 +30,7 @@ COPY . /var/www/html
 # Ku rakib Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+
 # Sii ogolaanshaha folder-yada Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
@@ -38,5 +43,3 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.
 EXPOSE 80
 
 CMD ["apache2-foreground"]
-
-
